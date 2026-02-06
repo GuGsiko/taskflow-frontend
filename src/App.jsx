@@ -1,19 +1,23 @@
-import { useState } from "react";
+import { useState , useEffect } from "react";
 import TaskInput from "./components/TaskInput";
 import TaskList from "./components/TaskList";
 
 function App(){
-  const[task, setTasks] = useState ([]);
+  const[tasks, setTasks] = useState (() => {
+    const saved = localStorage.getItem("tasks");
+    return saved ? JSON.parse(saved) : [] ; 
+  });
+
   const[filter, setFilter] =useState("all");
 
-  const addTask = (text) => {
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
+  const addTask= (text) => {
     setTasks((prev) => [
       ...prev,
-      {
-        id: Date.now(),
-        text,
-        completed: false,
-      },
+      { id: Date.now(), text , completed : false},
     ]);
   };
 
@@ -31,7 +35,7 @@ function App(){
     setTasks((prev) => prev.filter((t) =>t.id != id));
   };
   
-  const filteredTasks = task.filter((task) => {
+  const filteredTasks = tasks.filter((task) => {
     if (filter == "active") return !task.completed;
     if (filter == "completed") return task.completed;
     return true; //all
