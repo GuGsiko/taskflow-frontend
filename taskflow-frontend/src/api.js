@@ -1,4 +1,4 @@
-const API_URL = "https://taskflow-backend.onrender.com/api";
+const API_URL = "https://taskflow-backend.onrender.com/api/tasks";
 
 // GET
 export async function fetchTasks() {
